@@ -15,7 +15,7 @@ headers: {
 "Content-Type": "application/json"
 },
 body: JSON.stringify({
-model: "meta-llama/Llama-3.1-8B-Instruct-Turbo",
+model: "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",
 messages: [
 { role: "user", content: message }
 ]
