@@ -45,18 +45,15 @@ async function send() {
 
     const data = await response.json();
 
-    if (data.choices && data.choices.length > 0) {
-      rispostaDiv.innerText = data.choices[0].message.content;
-    } else {
-      rispostaDiv.innerText = "Risposta non valida dal server.";
-    }
+   console.log(data);
 
-  } catch (error) {
-
-    rispostaDiv.innerText = "Errore: " + error.message;
-
-  }
-
+if (data.choices && data.choices.length > 0) {
+  rispostaDiv.innerText = data.choices[0].message.content;
+} else if (data.error) {
+  rispostaDiv.innerText = "Errore API: " + data.error;
+} else {
+  rispostaDiv.innerText = JSON.stringify(data);
+}
 }
 
 </script>
