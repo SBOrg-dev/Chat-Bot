@@ -1,31 +1,43 @@
 async function send() {
-    let inputField = document.getElementById("msg");
-    let text = inputField.value;
-    let rispostaDiv = document.getElementById("risposta");
 
-    if (!text) return; // Non inviare se il campo è vuoto
+  const inputField = document.getElementById("msg");
+  const rispostaDiv = document.getElementById("risposta");
 
-    rispostaDiv.innerText = "Sto pensando...";
-    inputField.value = ""; // Pulisce l'input dopo l'invio
+  const text = inputField.value.trim();
 
-    try {
-        const response = await fetch("/api/chat", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: text })
-        });
+  if (!text) return;
 
-        if (!response.ok) throw new Error("Errore di rete");
+  rispostaDiv.innerText = "Sto pensando...";
+  inputField.value = "";
 
-        const data = await response.json();
-        
-        // Verifica che i dati esistano prima di scriverli
-        if (data.choices && data.choices[0]) {
-            rispostaDiv.innerText = data.choices[0].message.content;
-        } else {
-            rispostaDiv.innerText = "Risposta non valida dal server.";
-        }
-    } catch (error) {
-        rispostaDiv.innerText = "Si è verificato un errore: " + error.message;
+  try {
+
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: text
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error("Errore server");
     }
+
+    const data = await response.json();
+
+    if (data.choices && data.choices.length > 0) {
+      rispostaDiv.innerText = data.choices[0].message.content;
+    } else {
+      rispostaDiv.innerText = "Risposta non valida dal server.";
+    }
+
+  } catch (error) {
+
+    rispostaDiv.innerText = "Errore: " + error.message;
+
+  }
+
 }
