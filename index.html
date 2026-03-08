@@ -8,7 +8,7 @@
 
 <h1>Tutor AI</h1>
 
-<input id="msg" type="text" placeholder="Scrivi qui">
+<input id="msg" type="text" placeholder="Scrivi la tua domanda">
 <button onclick="send()">Invia</button>
 
 <p id="risposta"></p>
@@ -39,21 +39,26 @@ async function send() {
       })
     });
 
-    if (!response.ok) {
-      throw new Error("Errore server");
-    }
-
     const data = await response.json();
 
-   console.log(data);
+    console.log("RISPOSTA SERVER:", data);
 
-if (data.choices && data.choices.length > 0) {
-  rispostaDiv.innerText = data.choices[0].message.content;
-} else if (data.error) {
-  rispostaDiv.innerText = "Errore API: " + data.error;
-} else {
-  rispostaDiv.innerText = JSON.stringify(data);
-}
+    if (data.choices && data.choices.length > 0) {
+      rispostaDiv.innerText = data.choices[0].message.content;
+    } 
+    else if (data.error) {
+      rispostaDiv.innerText = "Errore API: " + data.error;
+    } 
+    else {
+      rispostaDiv.innerText = "Errore sconosciuto: " + JSON.stringify(data);
+    }
+
+  } catch (error) {
+
+    rispostaDiv.innerText = "Errore di connessione: " + error.message;
+
+  }
+
 }
 
 </script>
