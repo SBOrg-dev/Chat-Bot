@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chat AI</title>
+</head>
+
+<body>
+
+<h2>Chat AI</h2>
+
+<input id="msg" placeholder="Scrivi una domanda">
+<button onclick="send()">Invia</button>
+
+<p id="risposta"></p>
+
+<script>
+
+async function send(){
+
+let text=document.getElementById("msg").value
+
+const response=await fetch("https://api.together.xyz/v1/chat/completions",{
+method:"POST",
+headers:{
+"Authorization":"Bearer tgp_v1_udyrXuiD-4VhB2Sm2kvlG-HPILDof_7nH_pMqHdH6Xk",
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+model:"Qwen/Qwen2.5-7B-Instruct",
+messages:[
+{role:"user",content:text}
+]
+})
+})
+
+const data=await response.json()
+
+document.getElementById("risposta").innerText =
+data.choices[0].message.content
+
+}
+
+</script>
+
+</body>
+</html>
