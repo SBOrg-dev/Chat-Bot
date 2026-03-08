@@ -1,49 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Tutor AI</title>
+
+<style>
+
+body{
+font-family:Arial;
+text-align:center;
+margin-top:60px;
+background:#f4f6f8;
+}
+
+#chatbox{
+width:400px;
+margin:auto;
+}
+
+input{
+width:100%;
+padding:12px;
+font-size:16px;
+}
+
+button{
+margin-top:10px;
+padding:10px 20px;
+font-size:16px;
+cursor:pointer;
+}
+
+#risposta{
+margin-top:20px;
+background:white;
+padding:15px;
+border-radius:8px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Tutor AI</h2>
+
+<div id="chatbox">
+
+<input id="msg" placeholder="Scrivi la tua domanda...">
+
+<button onclick="send()">Invia</button>
+
+<div id="risposta">
+Ciao! Sono Tutor AI. Scrivi una domanda.
+</div>
+
+</div>
+
 <script>
 
-async function send(){
+function send(){
 
 let text=document.getElementById("msg").value
 
-document.getElementById("risposta").innerText="Sto pensando..."
-
-try{
-
-const response=await fetch("https://api.together.xyz/v1/chat/completions",{
-
-method:"POST",
-
-headers:{
-"Authorization":"Bearer tgp_v1_ZgFnPGnlQ6DUee7GkGc01yD9lO7ttXS7T114eRgyeK0",
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-
-model:"meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",
-
-messages:[
-{role:"user",content:text}
-]
-
-})
-
-})
-
-const data=await response.json()
-
-if(data.error){
-document.getElementById("risposta").innerText=data.error.message
-return
-}
-
 document.getElementById("risposta").innerText=
-data.choices[0].message.content
-
-}catch(err){
-
-document.getElementById("risposta").innerText="Errore: "+err
+"Hai scritto: " + text +
+"\n\nTutor AI sarà collegato presto all'intelligenza artificiale."
 
 }
+
+</script>
+
+</body>
+
+</html>
 
 }
 
