@@ -2,15 +2,16 @@
 <html>
 
 <head>
+
 <title>Tutor AI</title>
 
 <style>
 
 body{
 font-family:Arial;
+background:#f4f6f8;
 text-align:center;
 margin-top:60px;
-background:#f4f6f8;
 }
 
 #chatbox{
@@ -36,6 +37,7 @@ margin-top:20px;
 background:white;
 padding:15px;
 border-radius:8px;
+min-height:40px;
 }
 
 </style>
@@ -60,13 +62,39 @@ Ciao! Sono Tutor AI. Scrivi una domanda.
 
 <script>
 
-function send(){
+async function send(){
 
 let text=document.getElementById("msg").value
 
-document.getElementById("risposta").innerText=
-"Hai scritto: " + text +
-"\n\nTutor AI sarà collegato presto all'intelligenza artificiale."
+document.getElementById("risposta").innerText="Sto pensando..."
+
+try{
+
+const response = await fetch("/api/chat",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+message:text
+})
+
+})
+
+const data = await response.json()
+
+document.getElementById("risposta").innerText =
+data.choices[0].message.content
+
+}catch(error){
+
+document.getElementById("risposta").innerText =
+"Errore nel collegamento con l'AI."
+
+}
 
 }
 
@@ -75,7 +103,3 @@ document.getElementById("risposta").innerText=
 </body>
 
 </html>
-
-}
-
-</script>
