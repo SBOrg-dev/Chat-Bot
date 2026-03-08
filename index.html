@@ -1,105 +1,31 @@
-<!DOCTYPE html>
-<html>
+async function send() {
+    let inputField = document.getElementById("msg");
+    let text = inputField.value;
+    let rispostaDiv = document.getElementById("risposta");
 
-<head>
+    if (!text) return; // Non inviare se il campo è vuoto
 
-<title>Tutor AI</title>
+    rispostaDiv.innerText = "Sto pensando...";
+    inputField.value = ""; // Pulisce l'input dopo l'invio
 
-<style>
+    try {
+        const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: text })
+        });
 
-body{
-font-family:Arial;
-background:#f4f6f8;
-text-align:center;
-margin-top:60px;
+        if (!response.ok) throw new Error("Errore di rete");
+
+        const data = await response.json();
+        
+        // Verifica che i dati esistano prima di scriverli
+        if (data.choices && data.choices[0]) {
+            rispostaDiv.innerText = data.choices[0].message.content;
+        } else {
+            rispostaDiv.innerText = "Risposta non valida dal server.";
+        }
+    } catch (error) {
+        rispostaDiv.innerText = "Si è verificato un errore: " + error.message;
+    }
 }
-
-#chatbox{
-width:400px;
-margin:auto;
-}
-
-input{
-width:100%;
-padding:12px;
-font-size:16px;
-}
-
-button{
-margin-top:10px;
-padding:10px 20px;
-font-size:16px;
-cursor:pointer;
-}
-
-#risposta{
-margin-top:20px;
-background:white;
-padding:15px;
-border-radius:8px;
-min-height:40px;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<h2>Tutor AI</h2>
-
-<div id="chatbox">
-
-<input id="msg" placeholder="Scrivi la tua domanda...">
-
-<button onclick="send()">Invia</button>
-
-<div id="risposta">
-Ciao! Sono Tutor AI. Scrivi una domanda.
-</div>
-
-</div>
-
-<script>
-
-async function send(){
-
-let text=document.getElementById("msg").value
-
-document.getElementById("risposta").innerText="Sto pensando..."
-
-try{
-
-const response = await fetch("/api/chat",{
-
-method:"POST",
-
-headers:{
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-message:text
-})
-
-})
-
-const data = await response.json()
-
-document.getElementById("risposta").innerText =
-data.choices[0].message.content
-
-}catch(error){
-
-document.getElementById("risposta").innerText =
-"Errore nel collegamento con l'AI."
-
-}
-
-}
-
-</script>
-
-</body>
-
-</html>
