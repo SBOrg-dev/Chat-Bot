@@ -1,42 +1,111 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Chat AI</title>
+<title>Tutor AI</title>
+
+<style>
+
+body{
+font-family:Arial;
+text-align:center;
+margin-top:40px;
+}
+
+input{
+width:300px;
+padding:10px;
+}
+
+button{
+padding:10px;
+margin:5px;
+}
+
+#risposta{
+margin-top:20px;
+max-width:600px;
+margin-left:auto;
+margin-right:auto;
+}
+
+</style>
+
 </head>
 
 <body>
 
-<h2>Chat AI</h2>
+<h2>Tutor AI – Assistente per lo studio</h2>
 
-<input id="msg" placeholder="Scrivi una domanda">
-<button onclick="send()">Invia</button>
+<input id="msg" placeholder="Fai una domanda...">
+
+<br><br>
+
+<button onclick="ask()">Chiedi</button>
+<button onclick="riassunto()">Riassunto</button>
+<button onclick="schema()">Schema</button>
+<button onclick="spiega()">Spiega semplice</button>
 
 <p id="risposta"></p>
 
 <script>
 
-async function send(){
+async function callAI(prompt){
 
-let text=document.getElementById("msg").value
+document.getElementById("risposta").innerText="Sto pensando..."
 
 const response=await fetch("https://api.together.xyz/v1/chat/completions",{
+
 method:"POST",
+
 headers:{
-"Authorization":"Bearer tgp_v1_udyrXuiD-4VhB2Sm2kvlG-HPILDof_7nH_pMqHdH6Xk",
+"Authorization":"tgp_v1_udyrXuiD-4VhB2Sm2kvlG-HPILDof_7nH_pMqHdH6Xk",
 "Content-Type":"application/json"
 },
+
 body:JSON.stringify({
-model:"Qwen/Qwen2.5-7B-Instruct",
+
+model:"meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",
+
 messages:[
-{role:"user",content:text}
+{role:"user",content:prompt}
 ]
+
 })
+
 })
 
 const data=await response.json()
 
-document.getElementById("risposta").innerText =
+document.getElementById("risposta").innerText=
 data.choices[0].message.content
+
+}
+
+function ask(){
+
+let text=document.getElementById("msg").value
+callAI(text)
+
+}
+
+function riassunto(){
+
+let text=document.getElementById("msg").value
+callAI("Fai un riassunto semplice di: "+text)
+
+}
+
+function schema(){
+
+let text=document.getElementById("msg").value
+callAI("Crea uno schema per studiare questo argomento: "+text)
+
+}
+
+function spiega(){
+
+let text=document.getElementById("msg").value
+callAI("Spiega in modo semplice per uno studente: "+text)
 
 }
 
